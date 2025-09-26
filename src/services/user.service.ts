@@ -11,13 +11,13 @@ function generateToken(user: User) {
 }
 
 async function login(email: string, password: string) {
-  const user = await userRepository.findByEmail(email);
-  if (!user)
-    return false;
+  if (!email || !password) return false;
 
-  const passwordCompare = password && (await compareHash(password, user.password));
-  if (!passwordCompare)
-    return false;
+  const user = await userRepository.findByEmail(email);
+  if (!user) return false;
+
+  const passwordCompare = await compareHash(password, user.password);
+  if (!passwordCompare) return false;
 
   return generateToken(user);
 }

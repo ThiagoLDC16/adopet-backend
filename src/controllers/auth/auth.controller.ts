@@ -5,21 +5,19 @@ import { UserType } from '@prisma/client';
 import * as z from 'zod';
 
 const registerSchema = z.object({
-  email: z.string().email({ message: 'Email inválido' }),
-  password: z.string().min(6, { message: 'Senha precisa ter pelo menos 6 caracteres' }),
-  name: z.string().min(1, { message: 'Nome é obrigatório' }),
+  email: z.string().email(),
+  password: z.string().min(6),
+  name: z.string().min(1),
   phone: z.string().optional(),
   cpf: z.string().optional(),
   cnpj: z.string().optional(),
-  type: z.enum([UserType.USER, UserType.ONG], {
-    message: 'Tipo deve ser USER ou ONG',
-  }),
+  type: z.enum([UserType.USER, UserType.ONG]),
 });
 
 export async function login(req: Request, res: Response) {
   const { email, password } = req.body;
 
-  const token = email && password && await userService.login(email, password);
+  const token = email && password && (await userService.login(email, password));
 
   if (!token) return res.status(401).json({ code: 'INVALID_CREDENTIALS' });
 
@@ -31,7 +29,7 @@ export async function register(req: Request, res: Response) {
   const { user } = await userService.register(data);
 
   return res.status(201).json({
-    token: userService.generateToken(user)
+    token: userService.generateToken(user),
   });
 }
 

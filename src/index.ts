@@ -1,5 +1,6 @@
 import express from 'express';
 import authRouter from './routes/auth.routes';
+import animalRouter from './routes/animal.routes';
 import { errorHandler } from './middlewares/error-handler';
 
 const app = express();
@@ -7,6 +8,7 @@ const app = express();
 app.use(express.json());
 
 app.use('/api/auth', authRouter);
+app.use('/api/animal', animalRouter);
 
 app.use(errorHandler);
 

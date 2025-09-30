@@ -1,8 +1,13 @@
 import express from 'express';
+import cors from 'cors';
 import authRouter from './routes/auth.routes';
 import { errorHandler } from './middlewares/error-handler';
 
 const app = express();
+
+app.use(cors({
+  origin: process.env.APP_ORIGIN || 'http://localhost:5173'
+}));
 
 app.use(express.json());
 

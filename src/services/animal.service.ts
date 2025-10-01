@@ -10,6 +10,14 @@ async function register(input: Prisma.AnimalCreateInput) {
   return { animal };
 }
 
+async function find(id: number) {
+  const animal = await animalRepository.findById(id)
+  if (!animal) return false;
+
+  return { animal }
+}
+
 export const animalService = {
   register,
+  find
 };

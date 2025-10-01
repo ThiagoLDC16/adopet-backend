@@ -1,12 +1,67 @@
 import { Request, Response } from 'express';
-// import { animalService } from '../../services/animal.service';
-// import { AnimalCreateInputObjectZodSchema } from "../../../prisma/generated/zod/schemas";
+import * as z from 'zod';
+import { UserType } from '@prisma/client';
+import { Prisma } from '@prisma/client';
+import { animalService } from '../../services/animal.service';
+
+const animalSchema = z.object({
+  name: z.string().min(1),
+  age: z.preprocess((val) => Number(val), z.number().int().gte(0)),
+  species: z.string().min(1),
+  breed: z.string().min(1),
+  midia: z.any(),
+  characteristics: z.any(),
+  description: z.string().min(1),
+  responsibleNGO: z.any(),
+  adopterUser: z.any().optional()
+});
 
 export async function register(req: Request, res: Response) {
-  // const data = AnimalCreateInputObjectZodSchema.parse(req.body);
-  // const { animal } = await animalService.register(data);
+  const parsed = animalSchema.parse(req.body);
+
+  const files = req.files as Express.Multer.File[];
+
+  const midiaData = files.map((file) => ({
+    type: file.mimetype.startsWith("image") ? "image" : "video",
+    extension: file.originalname.split(".").pop()!,
+    url: `/images/${file.filename}`,
+  }));
+
+  const characteristics = 
+    typeof parsed.characteristics === "string"
+    ? parsed.characteristics.split(",").map((c: string) => ({
+      characteristic: { create: { description: c.trim() } },
+    }))
+    : [];
+
+    const data: Prisma.AnimalCreateInput = {
+      name: parsed.name,
+      age: parsed.age,
+      species: parsed.species,
+      breed: parsed.breed,
+      description: parsed.description,
+
+      midia: { create: midiaData },
+
+      characteristics: { create: characteristics },
+
+      //TO-DO GET THE ID OF THE NGO ADDING THE ANIMAL
+      responsibleNGO: {
+        connect: { id: 1 }
+      }
+    };
+
+  const { animal } = await animalService.register(data);
 
   return res.status(201).json({
-    // animal
+    animal
   });
+}
+
+export async function find(req: Request, res: Response) {
+  const animal = await animalService.find(Number(req.params.id));
+  if (!animal) return res.status(404).json({ code: "NOT_FOUND "})
+  return res.status(200).json({
+    animal
+  })
 }

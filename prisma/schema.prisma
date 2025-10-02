@@ -2,6 +2,11 @@ generator client {
   provider = "prisma-client-js"
 }
 
+generator zod {
+  provider = "prisma-zod-generator"
+  output   = "./generated/zod" // onde os schemas vão ser salvos
+}
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
@@ -24,6 +29,49 @@ model User {
   notificacoesAtivas Notification[]
   createdAt          DateTime @default(now())
   updatedAt          DateTime @updatedAt
+
+  ownedPets Animal[] @relation("OwnedPets")
+  interestedPets Animal[] @relation("InterestedPets")
+}
+
+model Animal {
+  id Int @id @default(autoincrement())
+  name String 
+  age Int
+  species String
+  breed String
+  midia Midia[]
+  characteristics AnimalsCharacteristics[]
+  description String
+  responsibleNGO User @relation("OwnedPets", fields: [responsibleNGOId], references: [id])
+  responsibleNGOId Int
+  adopterUser User? @relation("InterestedPets", fields: [adopterUserId], references: [id])
+  adopterUserId Int?
+}
+
+model AnimalsCharacteristics {
+  animalId Int
+  characteristicId Int
+
+  @@id([animalId, characteristicId])
+
+  animal Animal @relation(fields: [animalId], references: [id])
+  characteristic Characteristic @relation(fields: [characteristicId], references: [id])
+}
+
+model Characteristic {
+  id Int @id @default(autoincrement())
+  description String
+  animals AnimalsCharacteristics[]
+}
+
+model Midia {
+  id Int @id @default(autoincrement())
+  type String
+  extension String
+  url String
+  animalId Int
+  animal Animal @relation(fields: [animalId], references: [id])
 }
 
 model Notification {

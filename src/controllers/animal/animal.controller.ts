@@ -45,9 +45,8 @@ export async function register(req: Request, res: Response) {
 
       characteristics: { create: characteristics },
 
-      //TO-DO GET THE ID OF THE NGO ADDING THE ANIMAL
       responsibleNGO: {
-        connect: { id: 1 }
+        connect: { id: (req as any).user.sub }
       }
     };
 

@@ -17,7 +17,15 @@ async function find(id: number) {
   return { animal }
 }
 
+async function exclude(id: number) {
+  const exclude = await animalRepository.deleteById(id)
+  if (!exclude) return false
+  return { exclude }
+}
+
+
 export const animalService = {
   register,
+  exclude,
   find
 };

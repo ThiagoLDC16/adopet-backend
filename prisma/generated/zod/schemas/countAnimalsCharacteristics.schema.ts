@@ -1,0 +1,10 @@
+import type { Prisma } from '@prisma/client';
+import * as z from 'zod';
+import { AnimalsCharacteristicsOrderByWithRelationInputObjectSchema as AnimalsCharacteristicsOrderByWithRelationInputObjectSchema } from './objects/AnimalsCharacteristicsOrderByWithRelationInput.schema';
+import { AnimalsCharacteristicsWhereInputObjectSchema as AnimalsCharacteristicsWhereInputObjectSchema } from './objects/AnimalsCharacteristicsWhereInput.schema';
+import { AnimalsCharacteristicsWhereUniqueInputObjectSchema as AnimalsCharacteristicsWhereUniqueInputObjectSchema } from './objects/AnimalsCharacteristicsWhereUniqueInput.schema';
+import { AnimalsCharacteristicsCountAggregateInputObjectSchema as AnimalsCharacteristicsCountAggregateInputObjectSchema } from './objects/AnimalsCharacteristicsCountAggregateInput.schema';
+
+export const AnimalsCharacteristicsCountSchema: z.ZodType<Prisma.AnimalsCharacteristicsCountArgs> = z.object({ orderBy: z.union([AnimalsCharacteristicsOrderByWithRelationInputObjectSchema, AnimalsCharacteristicsOrderByWithRelationInputObjectSchema.array()]).optional(), where: AnimalsCharacteristicsWhereInputObjectSchema.optional(), cursor: AnimalsCharacteristicsWhereUniqueInputObjectSchema.optional(), take: z.number().optional(), skip: z.number().optional(), select: z.union([ z.literal(true), AnimalsCharacteristicsCountAggregateInputObjectSchema ]).optional() }).strict() as unknown as z.ZodType<Prisma.AnimalsCharacteristicsCountArgs>;
+
+export const AnimalsCharacteristicsCountZodSchema = z.object({ orderBy: z.union([AnimalsCharacteristicsOrderByWithRelationInputObjectSchema, AnimalsCharacteristicsOrderByWithRelationInputObjectSchema.array()]).optional(), where: AnimalsCharacteristicsWhereInputObjectSchema.optional(), cursor: AnimalsCharacteristicsWhereUniqueInputObjectSchema.optional(), take: z.number().optional(), skip: z.number().optional(), select: z.union([ z.literal(true), AnimalsCharacteristicsCountAggregateInputObjectSchema ]).optional() }).strict();

@@ -1,0 +1,15 @@
+import type { Prisma } from '@prisma/client';
+import * as z from 'zod';
+import { AnimalWhereInputObjectSchema as AnimalWhereInputObjectSchema } from './objects/AnimalWhereInput.schema';
+import { AnimalOrderByWithAggregationInputObjectSchema as AnimalOrderByWithAggregationInputObjectSchema } from './objects/AnimalOrderByWithAggregationInput.schema';
+import { AnimalScalarWhereWithAggregatesInputObjectSchema as AnimalScalarWhereWithAggregatesInputObjectSchema } from './objects/AnimalScalarWhereWithAggregatesInput.schema';
+import { AnimalScalarFieldEnumSchema } from './enums/AnimalScalarFieldEnum.schema';
+import { AnimalCountAggregateInputObjectSchema as AnimalCountAggregateInputObjectSchema } from './objects/AnimalCountAggregateInput.schema';
+import { AnimalMinAggregateInputObjectSchema as AnimalMinAggregateInputObjectSchema } from './objects/AnimalMinAggregateInput.schema';
+import { AnimalMaxAggregateInputObjectSchema as AnimalMaxAggregateInputObjectSchema } from './objects/AnimalMaxAggregateInput.schema';
+import { AnimalAvgAggregateInputObjectSchema as AnimalAvgAggregateInputObjectSchema } from './objects/AnimalAvgAggregateInput.schema';
+import { AnimalSumAggregateInputObjectSchema as AnimalSumAggregateInputObjectSchema } from './objects/AnimalSumAggregateInput.schema';
+
+export const AnimalGroupBySchema: z.ZodType<Prisma.AnimalGroupByArgs> = z.object({ where: AnimalWhereInputObjectSchema.optional(), orderBy: z.union([AnimalOrderByWithAggregationInputObjectSchema, AnimalOrderByWithAggregationInputObjectSchema.array()]).optional(), having: AnimalScalarWhereWithAggregatesInputObjectSchema.optional(), take: z.number().optional(), skip: z.number().optional(), by: z.array(AnimalScalarFieldEnumSchema), _count: z.union([ z.literal(true), AnimalCountAggregateInputObjectSchema ]).optional(), _min: AnimalMinAggregateInputObjectSchema.optional(), _max: AnimalMaxAggregateInputObjectSchema.optional(), _avg: AnimalAvgAggregateInputObjectSchema.optional(), _sum: AnimalSumAggregateInputObjectSchema.optional() }).strict() as unknown as z.ZodType<Prisma.AnimalGroupByArgs>;
+
+export const AnimalGroupByZodSchema = z.object({ where: AnimalWhereInputObjectSchema.optional(), orderBy: z.union([AnimalOrderByWithAggregationInputObjectSchema, AnimalOrderByWithAggregationInputObjectSchema.array()]).optional(), having: AnimalScalarWhereWithAggregatesInputObjectSchema.optional(), take: z.number().optional(), skip: z.number().optional(), by: z.array(AnimalScalarFieldEnumSchema), _count: z.union([ z.literal(true), AnimalCountAggregateInputObjectSchema ]).optional(), _min: AnimalMinAggregateInputObjectSchema.optional(), _max: AnimalMaxAggregateInputObjectSchema.optional(), _avg: AnimalAvgAggregateInputObjectSchema.optional(), _sum: AnimalSumAggregateInputObjectSchema.optional() }).strict();

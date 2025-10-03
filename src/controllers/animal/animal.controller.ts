@@ -27,28 +27,28 @@ export async function register(req: Request, res: Response) {
     url: `/images/${file.filename}`,
   }));
 
-  const characteristics = 
+  const characteristics =
     typeof parsed.characteristics === "string"
-    ? parsed.characteristics.split(",").map((c: string) => ({
-      characteristic: { create: { description: c.trim() } },
-    }))
-    : [];
+      ? parsed.characteristics.split(",").map((c: string) => ({
+        characteristic: { create: { description: c.trim() } },
+      }))
+      : [];
 
-    const data: Prisma.AnimalCreateInput = {
-      name: parsed.name,
-      age: parsed.age,
-      species: parsed.species,
-      breed: parsed.breed,
-      description: parsed.description,
+  const data: Prisma.AnimalCreateInput = {
+    name: parsed.name,
+    age: parsed.age,
+    species: parsed.species,
+    breed: parsed.breed,
+    description: parsed.description,
 
-      midia: { create: midiaData },
+    midia: { create: midiaData },
 
-      characteristics: { create: characteristics },
+    characteristics: { create: characteristics },
 
-      responsibleNGO: {
-        connect: { id: (req as any).user.sub }
-      }
-    };
+    responsibleNGO: {
+      connect: { id: (req as any).user.sub }
+    }
+  };
 
   const { animal } = await animalService.register(data);
 
@@ -59,8 +59,16 @@ export async function register(req: Request, res: Response) {
 
 export async function find(req: Request, res: Response) {
   const animal = await animalService.find(Number(req.params.id));
-  if (!animal) return res.status(404).json({ code: "NOT_FOUND "})
+  if (!animal) return res.status(404).json({ code: "NOT_FOUND " })
   return res.status(200).json({
     animal
   })
+}
+
+export async function exclude(req: Request, res: Response) {
+  const animal = await animalService.find(Number(req.params.id));
+  if (!animal) return res.status(404).json({ code: "NOT_FOUND " })
+  const exclude = await animalService.exclude(Number(req.params.id))
+  if (!exclude) return res.status(409).json({ code: "CONFLICT" })
+  return res.status(204).json({ ok: true })
 }

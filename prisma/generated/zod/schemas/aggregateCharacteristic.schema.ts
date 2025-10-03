@@ -1,0 +1,14 @@
+import type { Prisma } from '@prisma/client';
+import * as z from 'zod';
+import { CharacteristicOrderByWithRelationInputObjectSchema as CharacteristicOrderByWithRelationInputObjectSchema } from './objects/CharacteristicOrderByWithRelationInput.schema';
+import { CharacteristicWhereInputObjectSchema as CharacteristicWhereInputObjectSchema } from './objects/CharacteristicWhereInput.schema';
+import { CharacteristicWhereUniqueInputObjectSchema as CharacteristicWhereUniqueInputObjectSchema } from './objects/CharacteristicWhereUniqueInput.schema';
+import { CharacteristicCountAggregateInputObjectSchema as CharacteristicCountAggregateInputObjectSchema } from './objects/CharacteristicCountAggregateInput.schema';
+import { CharacteristicMinAggregateInputObjectSchema as CharacteristicMinAggregateInputObjectSchema } from './objects/CharacteristicMinAggregateInput.schema';
+import { CharacteristicMaxAggregateInputObjectSchema as CharacteristicMaxAggregateInputObjectSchema } from './objects/CharacteristicMaxAggregateInput.schema';
+import { CharacteristicAvgAggregateInputObjectSchema as CharacteristicAvgAggregateInputObjectSchema } from './objects/CharacteristicAvgAggregateInput.schema';
+import { CharacteristicSumAggregateInputObjectSchema as CharacteristicSumAggregateInputObjectSchema } from './objects/CharacteristicSumAggregateInput.schema';
+
+export const CharacteristicAggregateSchema: z.ZodType<Prisma.CharacteristicAggregateArgs> = z.object({ orderBy: z.union([CharacteristicOrderByWithRelationInputObjectSchema, CharacteristicOrderByWithRelationInputObjectSchema.array()]).optional(), where: CharacteristicWhereInputObjectSchema.optional(), cursor: CharacteristicWhereUniqueInputObjectSchema.optional(), take: z.number().optional(), skip: z.number().optional(), _count: z.union([ z.literal(true), CharacteristicCountAggregateInputObjectSchema ]).optional(), _min: CharacteristicMinAggregateInputObjectSchema.optional(), _max: CharacteristicMaxAggregateInputObjectSchema.optional(), _avg: CharacteristicAvgAggregateInputObjectSchema.optional(), _sum: CharacteristicSumAggregateInputObjectSchema.optional() }).strict() as unknown as z.ZodType<Prisma.CharacteristicAggregateArgs>;
+
+export const CharacteristicAggregateZodSchema = z.object({ orderBy: z.union([CharacteristicOrderByWithRelationInputObjectSchema, CharacteristicOrderByWithRelationInputObjectSchema.array()]).optional(), where: CharacteristicWhereInputObjectSchema.optional(), cursor: CharacteristicWhereUniqueInputObjectSchema.optional(), take: z.number().optional(), skip: z.number().optional(), _count: z.union([ z.literal(true), CharacteristicCountAggregateInputObjectSchema ]).optional(), _min: CharacteristicMinAggregateInputObjectSchema.optional(), _max: CharacteristicMaxAggregateInputObjectSchema.optional(), _avg: CharacteristicAvgAggregateInputObjectSchema.optional(), _sum: CharacteristicSumAggregateInputObjectSchema.optional() }).strict();

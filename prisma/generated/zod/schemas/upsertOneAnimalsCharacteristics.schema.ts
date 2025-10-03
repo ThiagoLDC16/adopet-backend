@@ -1,0 +1,13 @@
+import type { Prisma } from '@prisma/client';
+import * as z from 'zod';
+import { AnimalsCharacteristicsSelectObjectSchema as AnimalsCharacteristicsSelectObjectSchema } from './objects/AnimalsCharacteristicsSelect.schema';
+import { AnimalsCharacteristicsIncludeObjectSchema as AnimalsCharacteristicsIncludeObjectSchema } from './objects/AnimalsCharacteristicsInclude.schema';
+import { AnimalsCharacteristicsWhereUniqueInputObjectSchema as AnimalsCharacteristicsWhereUniqueInputObjectSchema } from './objects/AnimalsCharacteristicsWhereUniqueInput.schema';
+import { AnimalsCharacteristicsCreateInputObjectSchema as AnimalsCharacteristicsCreateInputObjectSchema } from './objects/AnimalsCharacteristicsCreateInput.schema';
+import { AnimalsCharacteristicsUncheckedCreateInputObjectSchema as AnimalsCharacteristicsUncheckedCreateInputObjectSchema } from './objects/AnimalsCharacteristicsUncheckedCreateInput.schema';
+import { AnimalsCharacteristicsUpdateInputObjectSchema as AnimalsCharacteristicsUpdateInputObjectSchema } from './objects/AnimalsCharacteristicsUpdateInput.schema';
+import { AnimalsCharacteristicsUncheckedUpdateInputObjectSchema as AnimalsCharacteristicsUncheckedUpdateInputObjectSchema } from './objects/AnimalsCharacteristicsUncheckedUpdateInput.schema';
+
+export const AnimalsCharacteristicsUpsertOneSchema: z.ZodType<Prisma.AnimalsCharacteristicsUpsertArgs> = z.object({ select: AnimalsCharacteristicsSelectObjectSchema.optional(), include: AnimalsCharacteristicsIncludeObjectSchema.optional(), where: AnimalsCharacteristicsWhereUniqueInputObjectSchema, create: z.union([ AnimalsCharacteristicsCreateInputObjectSchema, AnimalsCharacteristicsUncheckedCreateInputObjectSchema ]), update: z.union([ AnimalsCharacteristicsUpdateInputObjectSchema, AnimalsCharacteristicsUncheckedUpdateInputObjectSchema ]) }).strict() as unknown as z.ZodType<Prisma.AnimalsCharacteristicsUpsertArgs>;
+
+export const AnimalsCharacteristicsUpsertOneZodSchema = z.object({ select: AnimalsCharacteristicsSelectObjectSchema.optional(), include: AnimalsCharacteristicsIncludeObjectSchema.optional(), where: AnimalsCharacteristicsWhereUniqueInputObjectSchema, create: z.union([ AnimalsCharacteristicsCreateInputObjectSchema, AnimalsCharacteristicsUncheckedCreateInputObjectSchema ]), update: z.union([ AnimalsCharacteristicsUpdateInputObjectSchema, AnimalsCharacteristicsUncheckedUpdateInputObjectSchema ]) }).strict();

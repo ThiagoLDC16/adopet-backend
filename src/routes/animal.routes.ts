@@ -1,5 +1,7 @@
 import { Router } from 'express';
 import {
+  getAnimals,
+  getMyAnimals,
   register,
   edit,
   find,
@@ -11,10 +13,12 @@ import { upload } from "../middlewares/multer";
 
 const router = Router();
 
+router.get('/:id', find)
 router.post('/register', upload.array("midia", 10), authenticated(UserType.ONG), register);
-router.put('/id/:id', upload.array("midia", 10), authenticated(UserType.ONG), edit)
-router.get('/id/:id', find)
+router.put('/:id', upload.array("midia", 10), authenticated(UserType.ONG), edit)
 router.delete('/:id', exclude)
 
+router.get('/', getAnimals)
+router.get('/my', authenticated(UserType.ONG), getMyAnimals);
 
 export default router;

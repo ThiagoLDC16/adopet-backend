@@ -1,6 +1,17 @@
-import { Prisma, User } from '@prisma/client';
+import { AnimalSpecies, Prisma, User } from '@prisma/client';
 import { animalRepository } from '../repositories/animal.repository';
 import { AppError } from '../errors/app-error';
+
+interface FindAllFilters {
+  species?: AnimalSpecies;
+  breed?: string;
+  ageMin?: number;
+  ageMax?: number;
+  available?: boolean;
+  location?: string;
+  page?: number;
+  limit?: number;
+}
 
 async function register(input: Prisma.AnimalCreateInput) {
   const animal = await animalRepository.create({
@@ -29,10 +40,19 @@ async function exclude(id: number) {
   return { exclude }
 }
 
+async function findAll(filters: FindAllFilters = {}) {
+  return animalRepository.findAll(filters);
+}
+
+async function findByOng(userId: number, filters: FindAllFilters = {}) {
+  return animalRepository.findByOng(userId, filters);
+}
 
 export const animalService = {
   register,
   edit,
   exclude,
   find,
+  findAll,
+  findByOng,
 };

@@ -42,6 +42,8 @@ model Animal {
   responsibleNGOId Int
   adopterUser User? @relation("InterestedPets", fields: [adopterUserId], references: [id])
   adopterUserId Int?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
 }
 
 model AnimalsCharacteristics {
@@ -75,4 +77,12 @@ model Notification {
   userId Int
   user   User  @relation(fields: [userId], references: [id])
   createdAt DateTime @default(now())
+}
+
+enum AnimalSpecies {
+  DOG
+  CAT
+  BIRD
+  RODENT
+  OTHER
 }

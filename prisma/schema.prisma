@@ -1,0 +1,67 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                 Int            @id @default(autoincrement())
+  email              String         @unique
+  name               String
+  password           String
+  phone              String?
+  cpf                String?        @unique
+  cnpj               String?        @unique
+  type               UserType
+  createdAt          DateTime       @default(now())
+  updatedAt          DateTime       @updatedAt
+  Animal             Animal[]
+  notificacoesAtivas Notification[]
+}
+
+model Notification {
+  id        Int      @id @default(autoincrement())
+  message   String
+  userId    Int
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
+}
+
+model Animal {
+  id          Int           @id @default(autoincrement())
+  name        String
+  species     AnimalSpecies
+  breed       String?
+  age         Int
+  description String
+  status      AnimalStatus  @default(DISPONIVEL)
+  images      String[]
+  city        String
+  state       String
+  ongId       Int
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  User        User          @relation(fields: [ongId], references: [id])
+}
+
+enum UserType {
+  USER
+  ONG
+}
+
+enum AnimalStatus {
+  DISPONIVEL
+  ADOTADO
+  EM_PROCESSO
+}
+
+enum AnimalSpecies {
+  DOG
+  CAT
+  BIRD
+  RODENT
+  OTHER
+}

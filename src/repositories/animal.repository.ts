@@ -1,15 +1,31 @@
-import { Prisma, Animal } from '@prisma/client';
+import { Prisma, Animal, Characteristic } from '@prisma/client';
 import { prisma } from '../config/prisma';
 
 async function findById(id: number): Promise<Animal | null> {
-  return prisma.animal.findUnique({ where: { id } });
+  return prisma.animal.findUnique(
+    { 
+      where: { id },
+      include: {
+        characteristics: {
+          include: {
+            characteristic: true,
+          }
+        },
+        midia: true
+      } 
+    });
 }
 
 async function create(data: Prisma.AnimalCreateInput): Promise<Animal> {
   return prisma.animal.create({ data });
 }
 
+async function edit(id: number, data: Prisma.AnimalUpdateInput): Promise<Animal> {
+  return prisma.animal.update({ where: { id }, data})
+}
+
 export const animalRepository = {
   findById,
   create,
+  edit,
 };

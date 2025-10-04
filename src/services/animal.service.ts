@@ -17,7 +17,14 @@ async function find(id: number) {
   return { animal }
 }
 
+async function edit(id: number, input: Prisma.AnimalUpdateInput) {
+  const animal = await animalRepository.edit(id, {...input});
+
+  return { animal };
+}
+
 export const animalService = {
   register,
-  find
+  edit,
+  find,
 };

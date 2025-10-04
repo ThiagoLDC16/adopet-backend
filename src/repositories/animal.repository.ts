@@ -16,6 +16,10 @@ async function findById(id: number): Promise<Animal | null> {
     });
 }
 
+async function deleteById(id: number): Promise<Animal | null> {
+  return prisma.animal.delete({ where: { id } });
+}
+
 async function create(data: Prisma.AnimalCreateInput): Promise<Animal> {
   return prisma.animal.create({ data });
 }
@@ -26,6 +30,7 @@ async function edit(id: number, data: Prisma.AnimalUpdateInput): Promise<Animal>
 
 export const animalRepository = {
   findById,
+  deleteById,
   create,
   edit,
 };

@@ -11,7 +11,7 @@ app.use(cors({
   origin: process.env.APP_ORIGIN || 'http://localhost:5173'
 }));
 
-app.use("/images", express.static(path.join(__dirname, "public", "images")));
+app.use("/images", express.static(path.join(process.cwd(), "public", "images")));
 
 app.use(express.json());
 

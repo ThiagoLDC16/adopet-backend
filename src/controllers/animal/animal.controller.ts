@@ -79,7 +79,7 @@ export async function edit(req: Request, res: Response) {
 
   const files = req.files as Express.Multer.File[] | undefined;
 
-  const existing = await prisma.animal.findUnique({ where: { id: parsed.id}, include: { midia: true }})
+  const existing = await prisma.animal.findUnique({ where: { id: parsed.id }, include: { midia: true } })
 
   const characteristics =
     typeof parsed.characteristics === "string"
@@ -105,14 +105,14 @@ export async function edit(req: Request, res: Response) {
   if (files && files.length > 0) {
     if (existing) {
       if (existing.midia)
-      for (const m of existing.midia) {
-        const filePath = path.join(process.cwd(), 'public', m.url);
-        try {
-          await fs.promises.unlink(filePath);
-        } catch (e) {
-          console.log(e);
+        for (const m of existing.midia) {
+          const filePath = path.join(process.cwd(), 'public', m.url);
+          try {
+            await fs.promises.unlink(filePath);
+          } catch (e) {
+            console.log(e);
+          }
         }
-      }
     }
 
     const midiaData = files.map((file) => ({
@@ -135,6 +135,14 @@ export async function find(req: Request, res: Response) {
   const animal = await animalService.find(Number(req.params.id));
   if (!animal) return res.status(404).json({ code: "NOT_FOUND " })
   return res.status(200).json({
-    ...animal
-  })
+    animal
+  });
+}
+
+export async function exclude(req: Request, res: Response) {
+  const animal = await animalService.find(Number(req.params.id));
+  if (!animal) return res.status(404).json({ code: "NOT_FOUND " })
+  const exclude = await animalService.exclude(Number(req.params.id))
+  if (!exclude) return res.status(409).json({ code: "CONFLICT" })
+  return res.status(204).json({ ok: true })
 }

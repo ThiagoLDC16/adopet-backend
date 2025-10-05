@@ -20,16 +20,28 @@ interface FindAllResult {
 
 async function findById(id: number): Promise<Animal | null> {
   return prisma.animal.findUnique(
-    { 
+    {
       where: { id },
       include: {
         characteristics: {
           include: {
-            characteristic: true,
+            characteristic: {
+              select: {
+                description: true
+              }
+            },
           }
         },
-        midia: true
-      } 
+        midia: true,
+        responsibleNGO: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            phone: true
+          }
+        }
+      }
     });
 }
 
@@ -42,7 +54,7 @@ async function create(data: Prisma.AnimalCreateInput): Promise<Animal> {
 }
 
 async function edit(id: number, data: Prisma.AnimalUpdateInput): Promise<Animal> {
-  return prisma.animal.update({ where: { id }, data})
+  return prisma.animal.update({ where: { id }, data })
 }
 
 async function findAll(filters: FindAllFilters = {}): Promise<FindAllResult> {
@@ -81,6 +93,7 @@ async function findAll(filters: FindAllFilters = {}): Promise<FindAllResult> {
             email: true,
           },
         },
+        midia: true
       },
       skip,
       take: limit,

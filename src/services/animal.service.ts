@@ -23,13 +23,14 @@ async function register(input: Prisma.AnimalCreateInput) {
 
 async function find(id: number) {
   const animal = await animalRepository.findById(id)
+
   if (!animal) return false;
 
   return { animal }
 }
 
 async function edit(id: number, input: Prisma.AnimalUpdateInput) {
-  const animal = await animalRepository.edit(id, {...input});
+  const animal = await animalRepository.edit(id, { ...input });
 
   return { animal };
 }

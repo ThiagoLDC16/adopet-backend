@@ -9,8 +9,8 @@ const registerSchema = z.object({
   password: z.string().min(6),
   name: z.string().min(1),
   phone: z.string().optional(),
-  cpf: z.string().optional(),
-  cnpj: z.string().optional(),
+  cpf: z.string().optional().nullable(),
+  cnpj: z.string().optional().nullable(),
   type: z.enum([UserType.USER, UserType.ONG]),
 });
 

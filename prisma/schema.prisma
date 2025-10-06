@@ -13,70 +13,102 @@ enum UserType {
 }
 
 model User {
-  id                 Int      @id @default(autoincrement())
-  email              String   @unique
+  id                 Int            @id @default(autoincrement())
+  email              String         @unique
   name               String
-  password              String
-  phone           String?
-  cpf                String?  @unique
-  cnpj               String?  @unique
+  password           String
+  phone              String?
+  cpf                String?        @unique
+  cnpj               String?        @unique
   type               UserType
   notificacoesAtivas Notification[]
-  createdAt          DateTime @default(now())
-  updatedAt          DateTime @updatedAt
+  createdAt          DateTime       @default(now())
+  updatedAt          DateTime       @updatedAt
 
-  ownedPets Animal[] @relation("OwnedPets")
+  reports Report[]
+
+  ownedPets      Animal[] @relation("OwnedPets")
   interestedPets Animal[] @relation("InterestedPets")
 }
 
 model Animal {
-  id Int @id @default(autoincrement())
-  name String 
-  age Int
-  species String
-  breed String
-  midia Midia[]
-  characteristics AnimalsCharacteristics[]
-  description String
-  responsibleNGO User @relation("OwnedPets", fields: [responsibleNGOId], references: [id])
+  id               Int                      @id @default(autoincrement())
+  name             String
+  age              Int
+  species          String
+  breed            String
+  midia            Midia[]
+  characteristics  AnimalsCharacteristics[]
+  description      String
+  responsibleNGO   User                     @relation("OwnedPets", fields: [responsibleNGOId], references: [id])
   responsibleNGOId Int
-  adopterUser User? @relation("InterestedPets", fields: [adopterUserId], references: [id])
-  adopterUserId Int?
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
+  adopterUser      User?                    @relation("InterestedPets", fields: [adopterUserId], references: [id])
+  adopterUserId    Int?
+  createdAt        DateTime                 @default(now())
+  updatedAt        DateTime                 @updatedAt
 }
 
 model AnimalsCharacteristics {
-  animalId Int
+  animalId         Int
   characteristicId Int
 
-  @@id([animalId, characteristicId])
-
-  animal Animal @relation(fields: [animalId], references: [id])
+  animal         Animal         @relation(fields: [animalId], references: [id])
   characteristic Characteristic @relation(fields: [characteristicId], references: [id])
+
+  @@id([animalId, characteristicId])
 }
 
 model Characteristic {
-  id Int @id @default(autoincrement())
-  description String @unique
-  animals AnimalsCharacteristics[]
+  id          Int                      @id @default(autoincrement())
+  description String                   @unique
+  animals     AnimalsCharacteristics[]
 }
 
 model Midia {
-  id Int @id @default(autoincrement())
-  type String
+  id        Int    @id @default(autoincrement())
+  type      String
   extension String
-  url String
-  animalId Int
-  animal Animal @relation(fields: [animalId], references: [id])
+  url       String
+
+  animalId Int?
+  animal   Animal? @relation(fields: [animalId], references: [id])
+
+  reportId Int?
+  report   Report? @relation(fields: [reportId], references: [id])
 }
 
 model Notification {
   id        Int      @id @default(autoincrement())
-  message  String
-  userId Int
-  user   User  @relation(fields: [userId], references: [id])
+  message   String
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
   createdAt DateTime @default(now())
+}
+
+model Report {
+  id          Int    @id @default(autoincrement())
+  description String
+  details     String
+  location    String
+
+  midia Midia[]
+
+  status ReportStatus
+
+  userId Int?
+  user   User? @relation(fields: [userId], references: [id])
+
+  ocurrenceDate DateTime
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+enum ReportStatus {
+  PENDING
+  VALIDATED
+  REJECTED
+  IN_PROGRESS
+  RESOLVED
 }
 
 enum AnimalSpecies {

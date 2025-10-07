@@ -143,6 +143,7 @@ async function findByOng(
   const [animals, total] = await Promise.all([
     prisma.animal.findMany({
       where,
+      include: { midia: true },
       skip,
       take: limit,
       orderBy: { createdAt: 'desc' },

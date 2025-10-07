@@ -158,7 +158,7 @@ export async function find(req: Request, res: Response) {
   const animal = await animalService.find(Number(req.params.id));
   if (!animal) return res.status(404).json({ code: "NOT_FOUND " })
   return res.status(200).json({
-    animal
+    ...animal
   });
 }
 

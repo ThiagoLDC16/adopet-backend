@@ -1,4 +1,4 @@
-import { Prisma, Animal, Characteristic, AnimalSpecies } from '@prisma/client';
+import { Prisma, Animal, Characteristic, AnimalSpecies, Midia } from '@prisma/client';
 import { prisma } from '../config/prisma';
 
 interface FindAllFilters {
@@ -48,6 +48,11 @@ async function findById(id: number): Promise<Animal | null> {
 async function deleteById(id: number): Promise<Animal | null> {
   return prisma.animal.delete({ where: { id } });
 }
+
+async function findAnimalMidia(id: number): Promise<Midia[]> {
+  return prisma.midia.findMany({ where: { animalId: id } });
+}
+
 
 async function create(data: Prisma.AnimalCreateInput): Promise<Animal> {
   return prisma.animal.create({ data });
@@ -164,6 +169,7 @@ export const animalRepository = {
   findAll,
   findByOng,
   findById,
+  findAnimalMidia,
   deleteById,
   create,
   edit,

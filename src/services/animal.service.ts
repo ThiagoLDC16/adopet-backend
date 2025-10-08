@@ -1,6 +1,8 @@
 import { AnimalSpecies, Prisma, User } from '@prisma/client';
 import { animalRepository } from '../repositories/animal.repository';
 import { AppError } from '../errors/app-error';
+import path from 'path';
+import fs from 'fs'
 
 interface FindAllFilters {
   species?: AnimalSpecies;
@@ -36,6 +38,19 @@ async function edit(id: number, input: Prisma.AnimalUpdateInput) {
 }
 
 async function exclude(id: number) {
+  const midia = await animalRepository.findAnimalMidia(id)
+
+  if (midia && Array.isArray(midia)) {
+    midia.forEach(item => {
+      const midiaPath = path.join(process.cwd(), "public", item.url.replace(/^\//, ""));
+      try {
+        if (fs.existsSync(midiaPath)) fs.unlinkSync(midiaPath);
+      } catch (err) {
+        console.error("Erro ao deletar arquivo:", midiaPath, err);
+      }
+    });
+  }
+
   const exclude = await animalRepository.deleteById(id)
   if (!exclude) return false
   return { exclude }

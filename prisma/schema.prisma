@@ -52,8 +52,8 @@ model AnimalsCharacteristics {
   animalId         Int
   characteristicId Int
 
-  animal         Animal         @relation(fields: [animalId], references: [id])
-  characteristic Characteristic @relation(fields: [characteristicId], references: [id])
+  animal         Animal         @relation(fields: [animalId], references: [id], onDelete: Cascade)
+  characteristic Characteristic @relation(fields: [characteristicId], references: [id], onDelete: Cascade)
 
   @@id([animalId, characteristicId])
 }
@@ -71,10 +71,10 @@ model Midia {
   url       String
 
   animalId Int?
-  animal   Animal? @relation(fields: [animalId], references: [id])
+  animal   Animal? @relation(fields: [animalId], references: [id], onDelete: Cascade)
 
   reportId Int?
-  report   Report? @relation(fields: [reportId], references: [id])
+  report   Report? @relation(fields: [reportId], references: [id], onDelete: Cascade)
 }
 
 model Notification {

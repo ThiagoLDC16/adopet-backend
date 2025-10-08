@@ -19,6 +19,6 @@ router.get('/my', authenticated(UserType.ONG), getMyAnimals);
 router.post('/register', upload.array("midia", 10), authenticated(UserType.ONG), register);
 router.get('/:id', find)
 router.put('/:id', upload.array("midia", 10), authenticated(UserType.ONG), edit)
-router.delete('/:id', exclude)
+router.delete('/:id', authenticated(UserType.ONG), exclude)
 
 export default router;

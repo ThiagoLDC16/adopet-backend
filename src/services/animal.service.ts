@@ -37,8 +37,11 @@ async function edit(id: number, input: Prisma.AnimalUpdateInput) {
   return { animal };
 }
 
-async function exclude(id: number) {
+async function exclude(id: number, ongId: number) {
   const midia = await animalRepository.findAnimalMidia(id)
+
+  const animal = await animalRepository.findById(id)
+  if (animal?.responsibleNGOId !== ongId) return false
 
   if (midia && Array.isArray(midia)) {
     midia.forEach(item => {
@@ -53,6 +56,7 @@ async function exclude(id: number) {
 
   const exclude = await animalRepository.deleteById(id)
   if (!exclude) return false
+
   return { exclude }
 }
 

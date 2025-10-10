@@ -163,10 +163,15 @@ export async function find(req: Request, res: Response) {
 }
 
 export async function exclude(req: Request, res: Response) {
-  const animal = await animalService.find(Number(req.params.id));
+  const animalId = Number(req.params.id)
+  const animal = await animalService.find(animalId);
   if (!animal) return res.status(404).json({ code: "NOT_FOUND " })
-  const exclude = await animalService.exclude(Number(req.params.id))
+
+  const ongId = Number((req as any).user.sub)
+  const exclude = await animalService.exclude(animalId, ongId)
+
   if (!exclude) return res.status(409).json({ code: "CONFLICT" })
+
   return res.status(204).json({ ok: true })
 }
 

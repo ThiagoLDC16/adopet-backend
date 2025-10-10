@@ -4,8 +4,9 @@ import { AnimalSpecies, UserType } from '@prisma/client';
 import { Prisma } from '@prisma/client';
 import { animalService } from '../../services/animal.service';
 import fs from 'fs';
-import path from 'path';
+import path, { parse } from 'path';
 import { prisma } from '../../config/prisma';
+import { userRepository } from '../../repositories/user.repository';
 
 const animalSchema = z.object({
   id: z.number().optional(),
@@ -30,7 +31,7 @@ const animalSchemaEdit = z.object({
   characteristics: z.any(),
   description: z.string().min(1),
   responsibleNGO: z.any(),
-  adopterUser: z.any().optional()
+  adopterEmail: z.string().optional()
 });
 
 const querySchema = z.object({
@@ -122,8 +123,20 @@ export async function edit(req: Request, res: Response) {
 
     responsibleNGO: {
       connect: { id: (req as any).user.sub }
-    }
+    },
   };
+
+  const adopterUserEmail = parsed.adopterEmail;
+  if (adopterUserEmail) {
+    const adopterUser = await userRepository.findByEmail(adopterUserEmail)
+    if (adopterUser) {
+      const adopterUserId = adopterUser.id
+
+      data.adopterUser = {
+        connect: { id: adopterUserId}
+      }
+    }
+  }
 
   if (files && files.length > 0) {
     if (existing) {

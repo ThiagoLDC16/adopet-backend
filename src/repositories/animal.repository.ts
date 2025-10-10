@@ -40,6 +40,14 @@ async function findById(id: number): Promise<Animal | null> {
             email: true,
             phone: true
           }
+        },
+        adopterUser: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            phone: true
+          }
         }
       }
     });

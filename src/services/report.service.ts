@@ -11,6 +11,13 @@ async function register(input: Prisma.ReportCreateInput) {
     return { report }
 
 }
+
+async function findByUser(id: number) {
+    const reports = await reportRepository.findByUser(id)
+    return { reports }
+}
+
 export const reportServices = {
     register,
+    findByUser
 }

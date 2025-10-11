@@ -54,3 +54,16 @@ export async function register(req: Request, res: Response) {
     });
 
 }
+
+export async function getMyReports(req: Request, res: Response) {
+    const userId = Number((req as any).user.sub)
+
+    const reports = await reportServices.findByUser(userId)
+
+
+
+    if (!reports) return res.status(404).json({ code: "NOT_FOUND " })
+
+    res.status(200).json(reports)
+
+}

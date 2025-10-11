@@ -6,7 +6,14 @@ async function create(data: Prisma.ReportCreateInput): Promise<Report> {
     return prisma.report.create({ data });
 }
 
+async function findByUser(id: number): Promise<Report[] | null> {
+    return prisma.report.findMany({
+        where: { userId: id },
+        include: { midia: true }
+    })
+}
+
 export const reportRepository = {
     create,
-
+    findByUser
 };

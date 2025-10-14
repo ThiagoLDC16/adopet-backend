@@ -57,6 +57,29 @@ const querySchema = z.object({
     .default(10),
 });
 
+const querySchema = z.object({
+  species: z
+    .enum([
+      AnimalSpecies.DOG,
+      AnimalSpecies.CAT,
+      AnimalSpecies.BIRD,
+      AnimalSpecies.RODENT,
+      AnimalSpecies.OTHER,
+    ])
+    .optional(),
+  breed: z.string().optional(),
+  ageMin: z.string().transform(Number).pipe(z.number().int().min(0)).optional(),
+  ageMax: z.string().transform(Number).pipe(z.number().int().min(0)).optional(),
+  available: z.string().transform(Boolean).pipe(z.boolean()).optional(),
+  location: z.string().optional(),
+  page: z.string().transform(Number).pipe(z.number().int().min(1)).default(1),
+  limit: z
+    .string()
+    .transform(Number)
+    .pipe(z.number().int().min(1).max(100))
+    .default(10),
+});
+
 export async function register(req: Request, res: Response) {
   const parsed = animalSchema.parse(req.body);
 

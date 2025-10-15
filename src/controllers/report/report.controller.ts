@@ -57,15 +57,27 @@ export async function register(req: Request, res: Response) {
 
 export async function getMyReports(req: Request, res: Response) {
     const userId = Number((req as any).user.sub)
+    const userType = (req as any).user.type;
 
-    const reports = await reportServices.findByUser(userId)
+    const reports = await reportServices.findByUser(userId, userType)
 
 
-
-    if (!reports) return res.status(404).json({ code: "NOT_FOUND " })
+    if (!reports) return res.status(404).json({ code: "NOT_FOUND" })
 
     res.status(200).json(reports)
+}
 
+export async function getPendingReports(req: Request, res: Response) {
+    const reports = await reportServices.getPendingReports();
+    return res.status(200).json(reports);
+}
+
+export async function sendReportToReview(req: Request, res: Response) {
+    const userId = +(req as any).user.sub;
+    const reportId = +req.params.id;
+
+    await reportServices.sendReportToReview(reportId, userId);
+    return res.status(200).send();
 }
 
 export async function edit(req: Request, res: Response) {

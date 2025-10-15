@@ -2,7 +2,7 @@
 CREATE TYPE "public"."UserType" AS ENUM ('USER', 'ONG');
 
 -- CreateEnum
-CREATE TYPE "public"."ReportStatus" AS ENUM ('PENDING', 'VALIDATED', 'REJECTED', 'IN_PROGRESS', 'RESOLVED');
+CREATE TYPE "public"."ReportStatus" AS ENUM ('PENDING', 'UNDER_REVIEW', 'REJECTED', 'IN_PROGRESS', 'RESOLVED');
 
 -- CreateEnum
 CREATE TYPE "public"."AnimalSpecies" AS ENUM ('DOG', 'CAT', 'BIRD', 'RODENT', 'OTHER');

@@ -1,7 +1,8 @@
-import { Prisma } from "@prisma/client";
+import { Prisma, ReportStatus, UserType } from "@prisma/client";
 import { reportRepository } from "../repositories/report.repository";
 import path from 'path';
 import fs from 'fs'
+import { AppError } from "../errors/app-error";
 
 
 
@@ -14,8 +15,32 @@ async function register(input: Prisma.ReportCreateInput) {
 
 }
 
-async function findByUser(id: number) {
-    const reports = await reportRepository.findByUser(id)
+async function getPendingReports() {
+    const reports = await reportRepository.findMany({
+        status: ReportStatus.PENDING,
+    });
+    return { reports };
+}
+
+async function sendReportToReview(id: number, ngoUserId: number) {
+    const report = await reportRepository.findById(id);
+    if (!report) throw new AppError("REPORT_NOT_FOUND", 404);
+    if (report.status != ReportStatus.PENDING) throw new AppError("REPORT_STATUS_NEED_BE_PENDING");
+
+    await reportRepository.edit(report.id, {
+        status: ReportStatus.UNDER_REVIEW,
+        ngo: { connect: { id: ngoUserId } }
+    });
+
+    return;
+}
+
+async function findByUser(id: number, userType: UserType) {
+    const reports = await reportRepository.findMany(
+        userType == UserType.ONG
+            ? { ngoId: id }
+            : { userId: id }
+    );
     return { reports }
 }
 
@@ -55,6 +80,8 @@ async function exclude(id: number) {
 
 export const reportServices = {
     register,
+    getPendingReports,
+    sendReportToReview,
     findByUser,
     findById,
     edit,

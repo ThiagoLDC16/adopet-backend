@@ -6,6 +6,13 @@ async function create(data: Prisma.ReportCreateInput): Promise<Report> {
     return prisma.report.create({ data });
 }
 
+async function findMany(where: Prisma.ReportWhereInput): Promise<Report[] | null> {
+    return prisma.report.findMany({
+        where,
+        include: { midia: true }
+    })
+}
+
 async function findByUser(id: number): Promise<Report[] | null> {
     return prisma.report.findMany({
         where: { userId: id },
@@ -35,6 +42,7 @@ async function deleteById(id: number): Promise<Report | null> {
 
 export const reportRepository = {
     create,
+    findMany,
     findByUser,
     findById,
     edit,

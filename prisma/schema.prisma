@@ -25,7 +25,8 @@ model User {
   createdAt          DateTime       @default(now())
   updatedAt          DateTime       @updatedAt
 
-  reports Report[]
+  createdReports     Report[] @relation("UserReports")
+  assignedReports    Report[] @relation("NgoReports")
 
   ownedPets      Animal[] @relation("OwnedPets")
   interestedPets Animal[] @relation("InterestedPets")
@@ -96,7 +97,10 @@ model Report {
   status ReportStatus
 
   userId Int?
-  user   User? @relation(fields: [userId], references: [id])
+  user   User? @relation("UserReports", fields: [userId], references: [id])
+
+  ngoId Int?
+  ngo   User? @relation("NgoReports", fields: [ngoId], references: [id])
 
   ocurrenceDate DateTime
   createdAt     DateTime @default(now())
@@ -105,7 +109,7 @@ model Report {
 
 enum ReportStatus {
   PENDING
-  VALIDATED
+  UNDER_REVIEW
   REJECTED
   IN_PROGRESS
   RESOLVED

@@ -58,9 +58,15 @@ export async function register(req: Request, res: Response) {
 export async function getMyReports(req: Request, res: Response) {
     const userId = Number((req as any).user.sub)
     const userType = (req as any).user.type;
+    
+    const { status, search, dateFrom, dateTo } = req.query;
 
-    const reports = await reportServices.findByUser(userId, userType)
-
+    const reports = await reportServices.findByUser(userId, userType, {
+        status: status as string,
+        search: search as string,
+        dateFrom: dateFrom as string,
+        dateTo: dateTo as string
+    })
 
     if (!reports) return res.status(404).json({ code: "NOT_FOUND" })
 
@@ -88,7 +94,7 @@ export async function edit(req: Request, res: Response) {
 
     const exists = await reportServices.findById(Number(id))
     if (!exists) return res.status(404).json({ code: "NOT_FOUND " })
-    if (exists.report.status !== ReportStatus.PENDING) return res.status(403).json({ code: "FORBIDDEN" })
+    if (exists.status !== ReportStatus.PENDING) return res.status(403).json({ code: "FORBIDDEN" })
 
 
     const midiaData = files.map((file) => ({
@@ -123,11 +129,39 @@ export async function exclude(req: Request, res: Response) {
     const report = await reportServices.findById(id);
 
     if (!report) return res.status(404).json({ code: "NOT_FOUND " })
-    if (report.report.status !== ReportStatus.PENDING) return res.status(403).json({ code: "FORBIDDEN" })
+    if (report.status !== ReportStatus.PENDING) return res.status(403).json({ code: "FORBIDDEN" })
 
     const exclude = await reportServices.exclude(id)
 
     if (!exclude) return res.status(409).json({ code: "CONFLICT" })
 
-    return res.status(204).json({ ok: true })
+return res.status(204).json({ ok: true })
+}
+
+export async function getReportById(req: Request, res: Response) {
+    const id = Number(req.params.id);
+    
+    const report = await reportServices.findById(id);
+    
+    if (!report) return res.status(404).json({ code: "NOT_FOUND" });
+    
+    return res.status(200).json(report);
+}
+
+export async function updateReportStatus(req: Request, res: Response) {
+    const id = Number(req.params.id);
+    const { status } = req.body;
+    
+    if (!Object.values(ReportStatus).includes(status)) {
+        return res.status(400).json({ code: "INVALID_STATUS" });
+    }
+    
+    const report = await reportServices.findById(id);
+    if (!report) return res.status(404).json({ code: "NOT_FOUND" });
+    
+    const updatedReport = await reportServices.edit(id, { status });
+    
+    if (!updatedReport) return res.status(500).json({ code: "INTERNAL_ERROR" });
+    
+    return res.status(200).json(updatedReport);
 }

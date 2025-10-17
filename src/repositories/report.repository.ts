@@ -9,21 +9,33 @@ async function create(data: Prisma.ReportCreateInput): Promise<Report> {
 async function findMany(where: Prisma.ReportWhereInput): Promise<Report[] | null> {
     return prisma.report.findMany({
         where,
-        include: { midia: true }
+        include: { 
+            midia: true,
+            user: true,
+            ngo: true
+        }
     })
 }
 
 async function findByUser(id: number): Promise<Report[] | null> {
     return prisma.report.findMany({
         where: { userId: id },
-        include: { midia: true }
+        include: { 
+            midia: true,
+            user: true,
+            ngo: true
+        }
     })
 }
 
 async function findById(id: number): Promise<Report | null> {
     return prisma.report.findUnique({
         where: { id: id },
-        include: { midia: true }
+        include: { 
+            midia: true,
+            user: true,
+            ngo: true
+        }
     })
 }
 

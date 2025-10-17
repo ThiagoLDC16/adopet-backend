@@ -35,25 +35,51 @@ async function sendReportToReview(id: number, ngoUserId: number) {
     return;
 }
 
-async function findByUser(id: number, userType: UserType) {
-    const reports = await reportRepository.findMany(
-        userType == UserType.ONG
-            ? { ngoId: id }
-            : { userId: id }
-    );
+async function findByUser(id: number, userType: UserType, filters: {
+    status?: string;
+    search?: string;
+    dateFrom?: string;
+    dateTo?: string;
+}) {
+    const where: any = userType == UserType.ONG
+        ? { ngoId: id }
+        : { userId: id };
+
+    if (filters.status) {
+        where.status = filters.status;
+    }
+
+    if (filters.search) {
+        where.OR = [
+            { description: { contains: filters.search, mode: 'insensitive' } },
+            { location: { contains: filters.search, mode: 'insensitive' } }
+        ];
+    }
+
+    if (filters.dateFrom || filters.dateTo) {
+        where.createdAt = {};
+        if (filters.dateFrom) {
+            where.createdAt.gte = new Date(filters.dateFrom);
+        }
+        if (filters.dateTo) {
+            where.createdAt.lte = new Date(filters.dateTo);
+        }
+    }
+
+    const reports = await reportRepository.findMany(where);
     return { reports }
 }
 
 async function findById(id: number) {
     const report = await reportRepository.findById(id)
-    if (!report) return false
-    return { report }
+    if (!report) return null
+    return report
 }
 
 async function edit(id: number, data: Prisma.ReportUpdateInput) {
     const report = await reportRepository.edit(id, data)
-    if (!report) return false
-    return { report }
+    if (!report) return null
+    return report
 }
 
 

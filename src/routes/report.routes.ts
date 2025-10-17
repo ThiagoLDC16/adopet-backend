@@ -7,10 +7,10 @@ import { UserType } from '@prisma/client';
 const router = Router();
 
 
-router.get('/my-reports', authenticated(), getMyReports);
+router.get('/my', authenticated(), getMyReports);
 router.get('/pending', authenticated(UserType.ONG), getPendingReports);
-router.get('/:id', authenticated(), getReportById);
 router.post("/register", upload.array("midia", 10), register)
+router.get('/:id', authenticated(), getReportById);
 router.put("/:id", upload.array("midia", 10), authenticated(UserType.USER), edit)
 router.put("/:id/send-to-review", authenticated(UserType.ONG), sendReportToReview);
 router.put("/:id/status", authenticated(UserType.ONG), updateReportStatus);
